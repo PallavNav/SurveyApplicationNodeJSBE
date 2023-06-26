@@ -1,0 +1,20 @@
+{
+  "name": "surevey_application_be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-local": "nodemon --inspect index.js",
+    "start": "nodemon --watch . --ext .js --exec 'node app.js --port 5000'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "mongoose": "^7.1.1",
+    "nodemon": "^2.0.22",
+    "uuid": "^9.0.0"
+  }
+}
