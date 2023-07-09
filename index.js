@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const databaseURL =
-  "mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority";
+      "mongodb+srv://mongodb:mongodb@cluster0.wzdr4vx.mongodb.net/survey_app_database?retryWrites=true&w=majority"
 
 /**
  * @description - Connecting to MongoDb
@@ -65,7 +65,7 @@ app.post("/nav/surveyApp/save", (req, res) => {
   if (validationCode) {
     res.status(420).json({ message: validationCode });
   } else {
-    SurveyData.insertMany(surveyData)
+    SurveyData.insertMany(req.body)
       .then(() => {
         res.status(200).json({
           message:
