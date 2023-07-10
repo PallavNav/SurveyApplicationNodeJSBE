@@ -76,7 +76,7 @@ app.post("/nav/surveyApp/save", (req, res) => {
       .save()
       .then(() => {
         res.status(200).json({
-          message: "Survey data saved successfully.",
+          message: "Your entered data has been saved successfully. You may now close this window!",
         });
       })
       .catch((error) => {
