@@ -39,20 +39,23 @@ app.use((req, res, next) => {
  * @description - To handle validation
  */
 const handleValidation = (request) => {
-  let errorCode = "";
-  if (request.length !== 11) {
+  let errorCode = null;
+  if (request.surveyDetails.length !== 11) {
     errorCode = "Please answer all the questions!";
-  } else {
-    request.forEach((data) => {
-      if (
-        !data.questionId ||
-        !data.question ||
-        data.answerSubmitted.length === 0
-      ) {
-        errorCode =
-          "It looks like we are having some technical glitch! Please contact the application owner!";
-      }
-    });
+  }
+  request.surveyDetails.forEach((data) => {
+    if (
+      !data.questionId ||
+      !data.question ||
+      data.answerSubmitted.length === 0
+    ) {
+      errorCode =
+        "It looks like we are having some technical glitch! Please contact the application owner!";
+    }
+  });
+  if (!request.submittedBy) {
+    errorCode =
+      "It looks like we are having some technical glitch! Please contact the application owner!";
   }
   return errorCode;
 };
@@ -76,7 +79,8 @@ app.post("/nav/surveyApp/save", (req, res) => {
       .save()
       .then(() => {
         res.status(200).json({
-          message: "Your entered data has been saved successfully. You may now close this window!",
+          message:
+            "Your entered data has been saved successfully. You may now close this window!",
         });
       })
       .catch((error) => {
