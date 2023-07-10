@@ -1,6 +1,6 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const SurveyData = require("./models/questionSchema");
 
@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const databaseURL =
-      "mongodb+srv://mongodb:mongodb@cluster0.wzdr4vx.mongodb.net/survey_app_database?retryWrites=true&w=majority"
+  "mongodb+srv://mongodb:mongodb@cluster0.wzdr4vx.mongodb.net/survey_app_database?retryWrites=true&w=majority";
 
 /**
  * @description - Connecting to MongoDb
@@ -20,7 +20,7 @@ mongoose
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
-});
+  });
 
 /**
  * @description - Request header to be passed to every API.
@@ -58,26 +58,46 @@ const handleValidation = (request) => {
 };
 
 /**
- * @description To handle the api request
+ * @description To handle the api request, only official API
  */
 app.post("/nav/surveyApp/save", (req, res) => {
+  const { submittedBy, surveyDetails } = req.body;
   let validationCode = handleValidation(req.body);
   if (validationCode) {
     res.status(420).json({ message: validationCode });
   } else {
-    SurveyData.insertMany(req.body)
+    const id = uuidv4();
+    const survey = new SurveyData({
+      submittedBy,
+      surveyDetails,
+    });
+
+    survey
+      .save()
       .then(() => {
         res.status(200).json({
-          message:
-            "Your entered data has been saved successfully. You may now close this window!",
+          message: "Survey data saved successfully.",
         });
       })
       .catch((error) => {
         res
           .status(500)
-          .json({ message: "An error occurred while storing survey data." });
+          .json({ error: "An error occurred while saving the survey data." });
       });
   }
+});
+
+/**
+ * @description To delete/clear the complete data, only official API
+ */
+app.delete("/nav/surveyApp/delete", (req, res, next) => {
+  SurveyData.deleteMany()
+    .then(() => {
+      res.status(200).json({ message: "All records deleted successfully" });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error deleting records" });
+    });
 });
 
 /***
