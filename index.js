@@ -63,6 +63,10 @@ const handleValidation = (request) => {
   return errorCode;
 };
 
+app.get('/', (req, res) => {
+  res.send('Hey this is my API running 🥳')
+})
+
 /**
  * @description To handle the api request, only official API
  */
