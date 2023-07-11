@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start-local": "nodemon --inspect index.js",
-    "start": "nodemon --watch . --ext .js --exec 'node app.js --port 5000'"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
