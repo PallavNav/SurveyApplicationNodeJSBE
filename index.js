@@ -1,18 +1,21 @@
+const configuration = require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const SurveyData = require("./models/questionSchema");
 
+require('dotenv').config();
 const app = express();
 app.use(bodyParser.json());
 
 const databaseURL =
-  "mongodb+srv://mongodb:mongodb@cluster0.wzdr4vx.mongodb.net/survey_app_database?retryWrites=true&w=majority";
+ `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wzdr4vx.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 /**
  * @description - Connecting to MongoDb
  */
+console.log(configuration);
 mongoose
   .connect(databaseURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -69,7 +72,6 @@ app.post("/nav/surveyApp/save", (req, res) => {
   if (validationCode) {
     res.status(420).json({ message: validationCode });
   } else {
-    const id = uuidv4();
     const survey = new SurveyData({
       submittedBy,
       surveyDetails,
@@ -107,6 +109,9 @@ app.delete("/nav/surveyApp/delete", (req, res, next) => {
 /***
  * @description To make the server listen at port 5000
  */
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
+const port = process.env.PORT || 5050;
+app.listen(port, () => {
+  console.log(`Survey Server started as ${process.env.PORT}|| 5050`);
 });
+
+module.exports = app;
