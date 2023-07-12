@@ -12,6 +12,21 @@ const databaseURL =
  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wzdr4vx.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 /**
+ * @description - Request header to be passed to every API.
+ */
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
+
+
+/**
  * @description - Connecting to MongoDb
  */
 mongoose
@@ -22,19 +37,6 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
-
-/**
- * @description - Request header to be passed to every API.
- */
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  next();
-});
 
 /**
  * @description - To handle validation
