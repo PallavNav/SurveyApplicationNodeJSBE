@@ -1,4 +1,3 @@
-const configuration = require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
@@ -15,7 +14,6 @@ const databaseURL =
 /**
  * @description - Connecting to MongoDb
  */
-console.log(configuration);
 mongoose
   .connect(databaseURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -63,7 +61,7 @@ const handleValidation = (request) => {
   return errorCode;
 };
 
-app.get('/', (req, res) => {
+app.get('/aboutSurveyApp', (req, res) => {
   res.send('Hey this is my API running 🥳')
 })
 
@@ -113,7 +111,7 @@ app.delete("/nav/surveyApp/delete", (req, res, next) => {
 /***
  * @description To make the server listen at port 5000
  */
-const port = process.env.PORT || 5050;
+const port = process.env.PORT || 4050;
 app.listen(port, (err, res) => {
   if (err) {
       console.log(err)
