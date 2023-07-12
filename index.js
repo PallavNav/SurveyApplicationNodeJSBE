@@ -25,7 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 /**
  * @description - Connecting to MongoDb
  */
