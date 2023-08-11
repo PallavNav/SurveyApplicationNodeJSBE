@@ -62,8 +62,8 @@ const handleValidation = (request) => {
   return errorCode;
 };
 
-app.get('/aboutSurveyApp', (req, res) => {
-  res.send('Hey this is my API running 🥳')
+app.get('/nav/surveyApp/aboutSurveyApp', (req, res) => {
+  res.send('Hey this is my API running 🥳');
 })
 
 /**
@@ -108,6 +108,31 @@ app.delete("/nav/surveyApp/delete", (req, res, next) => {
       res.status(500).json({ error: "Error deleting records" });
     });
 });
+
+/*** 
+ * @description To fetch all the survey data entered!
+*/
+app.get('/nav/surveyApp/fetchAllData', (req, res, next) => {
+  SurveyData.find()
+    .then((response) => {
+      res.status(200).json({ submittedSurveyData: response });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "No Records Found!!" });
+    });
+});
+
+const removeDuplicate = (data) => {
+  const uniqueResponse = new Set();
+  return data.filter((obj)=> {
+    if(!uniqueResponse.has(obj.submittedBy)) {
+      uniqueResponse.add(obj.submittedBy);
+      return true;
+    }
+    return false;
+  })
+}
+
 
 /***
  * @description To make the server listen at port 5000
