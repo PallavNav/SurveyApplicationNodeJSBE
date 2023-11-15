@@ -179,7 +179,7 @@ const sendEmail = () => {
 };
 
 const task = cron.schedule(
-  "0 22 * * *",
+  "40 18 * * *",
   () => {
     sendEmail();
   },
