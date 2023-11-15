@@ -1,10 +1,11 @@
+const cron = require("node-cron");
 const express = require("express");
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
-const bodyParser = require("body-parser");
 const nodeMailer = require("nodemailer");
-const SurveyData = require("./models/questionSchema");
+const bodyParser = require("body-parser");
 const { Credentials } = require("./service.js");
+const SurveyData = require("./models/questionSchema");
 
 require("dotenv").config();
 const app = express();
@@ -163,17 +164,31 @@ const sendMail = (mailerDetails, mailOptions) => {
   });
 };
 
-app.get("/nav/surveyApp/sendMail", async (req, res, next) => {
-  try {
-    const senderDetails = manageMailSender(); // Configure sender details
-    const mailOptions1 = mailOptions;
-    const response = await sendMail(senderDetails, mailOptions1); // Send the email
+const sendEmail = () => {
+  app.get("/nav/surveyApp/sendMail", async (req, res, next) => {
+    try {
+      const senderDetails = manageMailSender(); // Configure sender details
+      const mailOptions1 = mailOptions;
+      const response = await sendMail(senderDetails, mailOptions1); // Send the email
 
-    res.status(200).json({ submittedSurveyData: response });
-  } catch (error) {
-    res.status(500).json({ error: "Error sending email" });
+      res.status(200).json({ submittedSurveyData: response });
+    } catch (error) {
+      res.status(500).json({ error: "Error sending email" });
+    }
+  });
+};
+
+const task = cron.schedule(
+  "0 22 * * *",
+  () => {
+    sendEmail();
+  },
+  {
+    timezone: "Asia/Kolkata", // Set the timezone to IST
   }
-});
+);
+
+task.start();
 
 /***
  * @description To make the server listen at port 5000
